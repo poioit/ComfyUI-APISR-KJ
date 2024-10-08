@@ -138,6 +138,7 @@ class APISR_upscale:
                     ], {
                         "default": 'fp32'
                     }),
+            "ratio" : ("RATIO",),
             },
         }
 
@@ -146,10 +147,12 @@ class APISR_upscale:
     FUNCTION = "upscale"
     CATEGORY = "APISR-KJ"
 
-    def upscale(self, ckpt_name, dtype, images, per_batch):
+    def upscale(self, ckpt_name, dtype, images, per_batch, ratio):
         device = mm.get_torch_device()
         offload_device = mm.unet_offload_device()
         model_path = folder_paths.get_full_path("upscale_models", ckpt_name)
+        if ratio == 2:
+            ckpt_name = "2x_APISR_RRDB_GAN_generator.pth"
         custom_config = {
             'dtype': dtype,
             'ckpt_name': ckpt_name,
